@@ -35,16 +35,16 @@ private final TaskMapper taskMapper;
     }
 
 
-    @DeleteMapping
+    @DeleteMapping(value = "{taskId}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long taskId) {
 return  ResponseEntity.ok().build();
     }
 
     @PutMapping
-    public EntityResponse<TaskDto> updateTask(@RequestBody TaskDto taskDto) {
+    public ResponseEntity<TaskDto> updateTask(@RequestBody TaskDto taskDto) {
         Task task = taskMapper.mapToTask(taskDto);
         Task savedTask = service.saveTask(task);
-        return EntityResponse.ok(taskMapper.mapToTaskDto(savedTask));
+        return ResponseEntity.ok(taskMapper.mapToTaskDto(savedTask));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
