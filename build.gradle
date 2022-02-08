@@ -2,7 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.5.9'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
-    id 'war'
+//    id 'war'
 }
 
 group = 'com.crud'
@@ -13,6 +13,9 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+}
+jar {
+    enabled = false
 }
 
 repositories {
@@ -29,6 +32,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     runtimeOnly 'mysql:mysql-connector-java'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.3.2'
+
 
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
@@ -36,7 +41,7 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.22'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
 
-    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+//    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 }
 
 tasks.named('test') {
