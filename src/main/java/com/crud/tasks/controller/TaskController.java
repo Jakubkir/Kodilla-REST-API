@@ -18,10 +18,10 @@ import java.util.List;
 @RequestMapping("/v1/tasks")
 @RequiredArgsConstructor
 public class TaskController {
-@Autowired
-private final DbService service;
-@Autowired
-private final TaskMapper taskMapper;
+    @Autowired
+    private final DbService service;
+    @Autowired
+    private final TaskMapper taskMapper;
 
     @GetMapping
     public ResponseEntity<List<TaskDto>> getTasks() {
@@ -31,14 +31,16 @@ private final TaskMapper taskMapper;
 
     @GetMapping(value = "{taskId}")
     public ResponseEntity<TaskDto> getTask(@PathVariable Long taskId) throws TaskNotFoundException {
-            return ResponseEntity.ok(taskMapper.mapToTaskDto(service.getTask(taskId)));
+        return ResponseEntity.ok(taskMapper.mapToTaskDto(service.getTask(taskId)));
     }
 
 
-    @DeleteMapping(value = "{taskId}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long taskId) {
-return  ResponseEntity.ok().build();
+    @RequestMapping(method = RequestMethod.DELETE, value = "/tasks/{taskId}")
+    public void deleteTask(@PathVariable Long taskId) {
+        service.deleteTask(taskId);
     }
+
+
 
     @PutMapping
     public ResponseEntity<TaskDto> updateTask(@RequestBody TaskDto taskDto) {
