@@ -7,20 +7,19 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
-@Entity(name = "tasks")
-@Table
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity(name="tasks")
 public class Task {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name="name")
     private String title;
 
-    @Column(name = "description")
+    @Column(name="description")
     private String content;
 }
