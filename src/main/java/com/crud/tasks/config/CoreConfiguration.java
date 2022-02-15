@@ -3,7 +3,13 @@ package com.crud.tasks.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+@EnableSwagger2
 @Configuration
 public class CoreConfiguration {
 
@@ -12,17 +18,12 @@ public class CoreConfiguration {
         return new RestTemplate();
     }
 
-
-//    // GET request
-//    getForObject(String url, Class responseType, Map uriVariables)
-//
-//    // POST request
-//    postForObject(String url, Object request, Class responseType,Object... uriVariables)
-//
-//    // PUT request
-//    put(URI url, Object request)
-//
-//    // DELETE request
-//    delete(String url, Map uriVariables)
-
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.crud.tasks.controller"))
+                .paths(PathSelectors.any())
+                .build();
+    }
 }
