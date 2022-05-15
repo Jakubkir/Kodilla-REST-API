@@ -13,13 +13,25 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SimpleMailService {
 
+    @Autowired
+    private MailCreatorService mailCreatorService;
+
     private final JavaMailSender javaMailSender;
 
     public void send(final Mail mail) {
         log.info("Starting email preparation...");
         try {
-            SimpleMailMessage mailMessage = createMailMessage(mail);
-            javaMailSender.send(mailMessage);
+            javaMailSender.send(createMimeMessage(mail));
+            log.info("Email has been sent.");
+        } catch (MailException e) {
+            log.error("Failed to process email sending: " + e.getMessage(), e);
+        }
+    }
+
+    public void sendInformation(final Mail mail) {
+        log.info("Starting email preparation...");
+        try {
+            javaMailSender.send(createMimeInformationMessage(mail));
             log.info("Email has been sent.");
         } catch (MailException e) {
             log.error("Failed to process email sending: " + e.getMessage(), e);
@@ -35,17 +47,20 @@ public class SimpleMailService {
         };
     }
 
+    private MimeMessagePreparator createMimeInformationMessage(final Mail mail) {
+        return mimeMessage -> {
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+            messageHelper.setTo(mail.getMailTo());
+            messageHelper.setSubject(mail.getSubject());
+            messageHelper.setText(mailCreatorService.buildTrelloInformationEmail(mail.getMessage()), true);
+        };
+    }
+
     private SimpleMailMessage createMailMessage(final Mail mail) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(mail.getMailTo());
         mailMessage.setSubject(mail.getSubject());
-//        mailMessage.setText(mailCreatorService.buildCardEmail(mail.getMessage()));
-        if (mail.getToCC() != null) {
-            mailMessage.setCc(mail.getToCC());
-        }
+        mailMessage.setText(mailCreatorService.buildTrelloCardEmail(mail.getMessage()));
         return mailMessage;
     }
-
-    @Autowired
-    private MailCreatorSerevice mailCreatorService;
 }
