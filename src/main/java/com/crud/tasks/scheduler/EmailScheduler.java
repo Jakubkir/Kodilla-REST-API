@@ -25,7 +25,7 @@ public class EmailScheduler {
     public void sendInformationEmail() {
         long size = taskRepository.count();
         String message = "";
-        Mail mail = new Mail(adminConfig.getAdminMail(), SUBJECT, message);
+        Mail mail = new Mail(adminConfig.getAdminMail(), SUBJECT, message, null);
         if (size > 1) {
             mail.setMessage("Currently in database you got " + size + " tasks");
         } else {
