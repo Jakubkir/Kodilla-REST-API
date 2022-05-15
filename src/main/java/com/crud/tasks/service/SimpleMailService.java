@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SimpleEmailService {
+public class SimpleMailService {
 
     private final JavaMailSender javaMailSender;
 
@@ -26,14 +26,26 @@ public class SimpleEmailService {
         }
     }
 
+    private MimeMessagePreparator createMimeMessage(final Mail mail) {
+        return mimeMessage -> {
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+            messageHelper.setTo(mail.getMailTo());
+            messageHelper.setSubject(mail.getSubject());
+            messageHelper.setText(mailCreatorService.buildTrelloCardEmail(mail.getMessage()), true);
+        };
+    }
+
     private SimpleMailMessage createMailMessage(final Mail mail) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(mail.getMailTo());
         mailMessage.setSubject(mail.getSubject());
 //        mailMessage.setText(mailCreatorService.buildCardEmail(mail.getMessage()));
-        if(mail.getToCC()!= null){
+        if (mail.getToCC() != null) {
             mailMessage.setCc(mail.getToCC());
         }
         return mailMessage;
     }
+
+    @Autowired
+    private MailCreatorSerevice mailCreatorService;
 }
